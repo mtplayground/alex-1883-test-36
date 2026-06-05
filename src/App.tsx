@@ -1,3 +1,5 @@
+import { APP_CONFIG } from './config';
+
 function App() {
   return (
     <main
@@ -6,7 +8,7 @@ function App() {
     >
       <section className="mx-auto w-full max-w-2xl">
         <p className="mb-3 text-sm font-bold tracking-wider text-orange-800 uppercase">
-          Issue #2
+          Issue #3
         </p>
         <h1
           id="app-title"
@@ -16,8 +18,8 @@ function App() {
         </h1>
         <p className="mt-4 max-w-xl text-lg text-gray-700">
           The Vite React application is initialized and ready for the abacus
-          model and components in the next issues, with Tailwind CSS and code
-          quality tooling configured.
+          model and components in the next issues. The default abacus is
+          configured for {APP_CONFIG.rodCount} rods.
         </p>
       </section>
     </main>
