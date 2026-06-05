@@ -1,8 +1,10 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { APP_CONFIG } from './config';
 import { Abacus } from './components/Abacus';
+import { ValueDisplay } from './components/ValueDisplay';
 import { useAbacusState } from './hooks/useAbacusState';
 import { getBeadActive } from './lib/abacusState';
+import { getTotalValue } from './lib/value';
 import type { BeadId } from './models/abacus';
 
 type DragIntent = Readonly<{
@@ -12,6 +14,7 @@ type DragIntent = Readonly<{
 function App() {
   const { rods, setBead } = useAbacusState(APP_CONFIG.rodCount);
   const [dragIntent, setDragIntent] = useState<DragIntent | null>(null);
+  const totalValue = useMemo(() => getTotalValue(rods), [rods]);
 
   const handleBeadPointerDown = useCallback(
     (beadId: BeadId) => {
@@ -45,7 +48,7 @@ function App() {
     >
       <section className="mx-auto w-full max-w-2xl">
         <p className="mb-3 text-sm font-bold tracking-wider text-orange-800 uppercase">
-          Issue #9
+          Issue #10
         </p>
         <h1
           id="app-title"
@@ -58,7 +61,11 @@ function App() {
           model and components in the next issues. The default abacus is
           configured for {APP_CONFIG.rodCount} rods.
         </p>
-        <div aria-label="Abacus frame preview" className="mt-8 max-w-full">
+        <div
+          aria-label="Abacus frame preview"
+          className="mt-8 flex max-w-full flex-col gap-4"
+        >
+          <ValueDisplay value={totalValue} />
           <Abacus
             onBeadInteractionEnd={handleBeadInteractionEnd}
             onBeadPointerDown={handleBeadPointerDown}
