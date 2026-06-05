@@ -21,7 +21,10 @@ export function Bead({
   onPointerDown,
   onPointerEnter,
 }: BeadProps) {
-  const activePosition = kind === 'heaven' ? 'translate-y-3' : '-translate-y-3';
+  const activePosition =
+    kind === 'heaven'
+      ? 'translate-y-[calc(var(--bead-h)*0.25)]'
+      : '-translate-y-[calc(var(--bead-h)*0.25)]';
   const positionClass = active ? activePosition : 'translate-y-0';
   const surfaceClass = active
     ? 'bg-amber-600 shadow-[inset_0_0.4rem_0.7rem_rgba(255,255,255,0.28),inset_0_-0.55rem_0.8rem_rgba(120,53,15,0.42),0_0.7rem_1.2rem_rgba(120,53,15,0.2)]'
@@ -32,7 +35,7 @@ export function Bead({
       aria-label={`${ariaLabel} (${active ? 'active' : 'inactive'})`}
       aria-pressed={active}
       className={joinClasses(
-        'block h-12 w-16 touch-none rounded-full border border-orange-950/35 transition-transform duration-200 ease-out will-change-transform select-none focus-visible:ring-2 focus-visible:ring-stone-950 focus-visible:ring-offset-2 focus-visible:outline-none motion-reduce:transition-none',
+        'block h-[var(--bead-h)] min-h-11 w-[var(--bead-w)] min-w-14 touch-none rounded-full border border-orange-950/35 transition-transform duration-200 ease-out will-change-transform select-none focus-visible:ring-2 focus-visible:ring-stone-950 focus-visible:ring-offset-2 focus-visible:outline-none motion-reduce:transition-none',
         onPointerDown ? 'cursor-grab active:cursor-grabbing' : 'cursor-default',
         positionClass,
         surfaceClass,
