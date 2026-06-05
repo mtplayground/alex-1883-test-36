@@ -1,5 +1,11 @@
 import { APP_CONFIG } from './config';
-import { Bead } from './components/Bead';
+import { Rod } from './components/Rod';
+import type { RodState } from './models/abacus';
+
+const PREVIEW_ROD: RodState = {
+  heaven: true,
+  earth: [true, true, false, false],
+};
 
 function App() {
   return (
@@ -9,7 +15,7 @@ function App() {
     >
       <section className="mx-auto w-full max-w-2xl">
         <p className="mb-3 text-sm font-bold tracking-wider text-orange-800 uppercase">
-          Issue #3
+          Issue #6
         </p>
         <h1
           id="app-title"
@@ -23,11 +29,10 @@ function App() {
           configured for {APP_CONFIG.rodCount} rods.
         </p>
         <div
-          aria-label="Bead component preview"
-          className="mt-8 flex h-20 items-center gap-8"
+          aria-label="Rod component preview"
+          className="mt-8 flex items-center"
         >
-          <Bead active={false} ariaLabel="Inactive earth bead" kind="earth" />
-          <Bead active ariaLabel="Active earth bead" kind="earth" />
+          <Rod label="Preview rod" rod={PREVIEW_ROD} />
         </div>
       </section>
     </main>
