@@ -1,11 +1,5 @@
 import { APP_CONFIG } from './config';
-import { Rod } from './components/Rod';
-import type { RodState } from './models/abacus';
-
-const PREVIEW_ROD: RodState = {
-  heaven: true,
-  earth: [true, true, false, false],
-};
+import { Abacus } from './components/Abacus';
 
 function App() {
   return (
@@ -15,7 +9,7 @@ function App() {
     >
       <section className="mx-auto w-full max-w-2xl">
         <p className="mb-3 text-sm font-bold tracking-wider text-orange-800 uppercase">
-          Issue #6
+          Issue #7
         </p>
         <h1
           id="app-title"
@@ -28,11 +22,8 @@ function App() {
           model and components in the next issues. The default abacus is
           configured for {APP_CONFIG.rodCount} rods.
         </p>
-        <div
-          aria-label="Rod component preview"
-          className="mt-8 flex items-center"
-        >
-          <Rod label="Preview rod" rod={PREVIEW_ROD} />
+        <div aria-label="Abacus frame preview" className="mt-8 max-w-full">
+          <Abacus rodCount={APP_CONFIG.rodCount} />
         </div>
       </section>
     </main>

@@ -6,13 +6,20 @@ type RodProps = Readonly<{
   className?: string;
   label?: string;
   rodIndex?: number;
+  showBar?: boolean;
 }>;
 
 function joinClasses(...classes: Array<string | undefined>) {
   return classes.filter(Boolean).join(' ');
 }
 
-export function Rod({ className, label, rod, rodIndex }: RodProps) {
+export function Rod({
+  className,
+  label,
+  rod,
+  rodIndex,
+  showBar = true,
+}: RodProps) {
   const rodLabel =
     label ?? (rodIndex === undefined ? 'Rod' : `Rod ${rodIndex + 1}`);
 
@@ -38,7 +45,10 @@ export function Rod({ className, label, rod, rodIndex }: RodProps) {
       </div>
       <div
         aria-hidden="true"
-        className="relative my-3 h-3 w-24 rounded-full bg-stone-900 shadow-sm"
+        className={joinClasses(
+          'relative my-3 h-3 w-24 rounded-full',
+          showBar ? 'bg-stone-900 shadow-sm' : 'bg-transparent',
+        )}
       />
       <div className="relative flex flex-col gap-2">
         {rod.earth.map((active, earthIndex) => (
