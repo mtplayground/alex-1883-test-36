@@ -1,10 +1,18 @@
 import { Bead } from './Bead';
-import { EARTH_BEAD_COUNT, getRodDigit, type RodState } from '../models/abacus';
+import {
+  EARTH_BEAD_COUNT,
+  getRodDigit,
+  type BeadId,
+  type EarthBeadIndex,
+  type RodState,
+} from '../models/abacus';
 
 type RodProps = Readonly<{
   rod: RodState;
   className?: string;
   label?: string;
+  onBeadPointerDown?: (beadId: BeadId) => void;
+  onBeadPointerEnter?: (beadId: BeadId) => void;
   rodIndex?: number;
   showBar?: boolean;
 }>;
@@ -16,12 +24,19 @@ function joinClasses(...classes: Array<string | undefined>) {
 export function Rod({
   className,
   label,
+  onBeadPointerDown,
+  onBeadPointerEnter,
   rod,
   rodIndex,
   showBar = true,
 }: RodProps) {
+  const stateRodIndex = rodIndex ?? 0;
   const rodLabel =
     label ?? (rodIndex === undefined ? 'Rod' : `Rod ${rodIndex + 1}`);
+  const heavenBeadId: BeadId = {
+    kind: 'heaven',
+    rodIndex: stateRodIndex,
+  };
 
   return (
     <section
@@ -41,6 +56,8 @@ export function Rod({
           active={rod.heaven}
           ariaLabel={`${rodLabel} heaven bead`}
           kind="heaven"
+          onPointerDown={() => onBeadPointerDown?.(heavenBeadId)}
+          onPointerEnter={() => onBeadPointerEnter?.(heavenBeadId)}
         />
       </div>
       <div
@@ -51,14 +68,24 @@ export function Rod({
         )}
       />
       <div className="relative flex flex-col gap-2">
-        {rod.earth.map((active, earthIndex) => (
-          <Bead
-            active={active}
-            ariaLabel={`${rodLabel} earth bead ${earthIndex + 1} of ${EARTH_BEAD_COUNT}`}
-            key={earthIndex}
-            kind="earth"
-          />
-        ))}
+        {rod.earth.map((active, earthIndex) => {
+          const earthBeadId: BeadId = {
+            earthIndex: earthIndex as EarthBeadIndex,
+            kind: 'earth',
+            rodIndex: stateRodIndex,
+          };
+
+          return (
+            <Bead
+              active={active}
+              ariaLabel={`${rodLabel} earth bead ${earthIndex + 1} of ${EARTH_BEAD_COUNT}`}
+              key={earthIndex}
+              kind="earth"
+              onPointerDown={() => onBeadPointerDown?.(earthBeadId)}
+              onPointerEnter={() => onBeadPointerEnter?.(earthBeadId)}
+            />
+          );
+        })}
       </div>
     </section>
   );

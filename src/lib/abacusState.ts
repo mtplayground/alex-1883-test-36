@@ -90,6 +90,16 @@ export function setBeadActive(
   );
 }
 
+export function getBeadActive(rods: AbacusState, beadId: BeadId) {
+  const rod = rods[beadId.rodIndex];
+
+  if (!rod) {
+    return false;
+  }
+
+  return beadId.kind === 'heaven' ? rod.heaven : rod.earth[beadId.earthIndex];
+}
+
 export function toggleBead(rods: AbacusState, beadId: BeadId): AbacusState {
   return updateRod(rods, beadId.rodIndex, (rod) =>
     beadId.kind === 'heaven'

@@ -1,9 +1,12 @@
 import { Rod } from './Rod';
-import { EMPTY_ROD_STATE, type RodState } from '../models/abacus';
+import { EMPTY_ROD_STATE, type BeadId, type RodState } from '../models/abacus';
 
 type AbacusProps = Readonly<{
   rodCount: number;
   className?: string;
+  onBeadInteractionEnd?: () => void;
+  onBeadPointerDown?: (beadId: BeadId) => void;
+  onBeadPointerEnter?: (beadId: BeadId) => void;
   rods?: readonly RodState[];
 }>;
 
@@ -20,13 +23,23 @@ function buildFrameRods(rodCount: number, rods?: readonly RodState[]) {
   );
 }
 
-export function Abacus({ className, rodCount, rods }: AbacusProps) {
+export function Abacus({
+  className,
+  onBeadInteractionEnd,
+  onBeadPointerDown,
+  onBeadPointerEnter,
+  rodCount,
+  rods,
+}: AbacusProps) {
   const frameRods = buildFrameRods(rodCount, rods);
 
   return (
     <section
       aria-label={`${frameRods.length} rod abacus`}
       className={joinClasses('w-full overflow-x-auto', className)}
+      onPointerCancel={onBeadInteractionEnd}
+      onPointerLeave={onBeadInteractionEnd}
+      onPointerUp={onBeadInteractionEnd}
     >
       <div className="inline-block rounded-md border-8 border-amber-950 bg-amber-100 p-4 shadow-2xl shadow-orange-950/20">
         <div className="relative isolate grid auto-cols-[6rem] grid-flow-col gap-2">
@@ -38,6 +51,8 @@ export function Abacus({ className, rodCount, rods }: AbacusProps) {
             <Rod
               className="z-10"
               key={rodIndex}
+              onBeadPointerDown={onBeadPointerDown}
+              onBeadPointerEnter={onBeadPointerEnter}
               rod={rod}
               rodIndex={rodIndex}
               showBar={false}
