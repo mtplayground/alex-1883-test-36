@@ -5,13 +5,22 @@ type BeadProps = Readonly<{
   ariaLabel: string;
   kind: BeadKind;
   className?: string;
+  onPointerDown?: () => void;
+  onPointerEnter?: () => void;
 }>;
 
 function joinClasses(...classes: Array<string | undefined>) {
   return classes.filter(Boolean).join(' ');
 }
 
-export function Bead({ active, ariaLabel, className, kind }: BeadProps) {
+export function Bead({
+  active,
+  ariaLabel,
+  className,
+  kind,
+  onPointerDown,
+  onPointerEnter,
+}: BeadProps) {
   const activePosition = kind === 'heaven' ? 'translate-y-3' : '-translate-y-3';
   const positionClass = active ? activePosition : 'translate-y-0';
   const surfaceClass = active
@@ -19,17 +28,24 @@ export function Bead({ active, ariaLabel, className, kind }: BeadProps) {
     : 'bg-orange-900 shadow-[inset_0_0.35rem_0.65rem_rgba(255,255,255,0.18),inset_0_-0.55rem_0.8rem_rgba(67,20,7,0.46),0_0.55rem_0.9rem_rgba(67,20,7,0.18)]';
 
   return (
-    <span
+    <button
       aria-label={`${ariaLabel} (${active ? 'active' : 'inactive'})`}
+      aria-pressed={active}
       className={joinClasses(
-        'block h-12 w-16 rounded-full border border-orange-950/35 transition-transform duration-200 ease-out will-change-transform motion-reduce:transition-none',
+        'block h-12 w-16 touch-none rounded-full border border-orange-950/35 transition-transform duration-200 ease-out will-change-transform select-none focus-visible:ring-2 focus-visible:ring-stone-950 focus-visible:ring-offset-2 focus-visible:outline-none motion-reduce:transition-none',
+        onPointerDown ? 'cursor-grab active:cursor-grabbing' : 'cursor-default',
         positionClass,
         surfaceClass,
         className,
       )}
       data-active={active}
       data-kind={kind}
-      role="img"
+      onPointerDown={(event) => {
+        event.preventDefault();
+        onPointerDown?.();
+      }}
+      onPointerEnter={onPointerEnter}
+      type="button"
     />
   );
 }

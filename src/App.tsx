@@ -1,9 +1,42 @@
+import { useCallback, useState } from 'react';
 import { APP_CONFIG } from './config';
 import { Abacus } from './components/Abacus';
 import { useAbacusState } from './hooks/useAbacusState';
+import { getBeadActive } from './lib/abacusState';
+import type { BeadId } from './models/abacus';
+
+type DragIntent = Readonly<{
+  active: boolean;
+}>;
 
 function App() {
-  const { rods } = useAbacusState(APP_CONFIG.rodCount);
+  const { rods, setBead } = useAbacusState(APP_CONFIG.rodCount);
+  const [dragIntent, setDragIntent] = useState<DragIntent | null>(null);
+
+  const handleBeadPointerDown = useCallback(
+    (beadId: BeadId) => {
+      const active = !getBeadActive(rods, beadId);
+
+      setDragIntent({ active });
+      setBead(beadId, active);
+    },
+    [rods, setBead],
+  );
+
+  const handleBeadPointerEnter = useCallback(
+    (beadId: BeadId) => {
+      if (!dragIntent) {
+        return;
+      }
+
+      setBead(beadId, dragIntent.active);
+    },
+    [dragIntent, setBead],
+  );
+
+  const handleBeadInteractionEnd = useCallback(() => {
+    setDragIntent(null);
+  }, []);
 
   return (
     <main
@@ -12,7 +45,7 @@ function App() {
     >
       <section className="mx-auto w-full max-w-2xl">
         <p className="mb-3 text-sm font-bold tracking-wider text-orange-800 uppercase">
-          Issue #8
+          Issue #9
         </p>
         <h1
           id="app-title"
@@ -26,7 +59,13 @@ function App() {
           configured for {APP_CONFIG.rodCount} rods.
         </p>
         <div aria-label="Abacus frame preview" className="mt-8 max-w-full">
-          <Abacus rodCount={APP_CONFIG.rodCount} rods={rods} />
+          <Abacus
+            onBeadInteractionEnd={handleBeadInteractionEnd}
+            onBeadPointerDown={handleBeadPointerDown}
+            onBeadPointerEnter={handleBeadPointerEnter}
+            rodCount={APP_CONFIG.rodCount}
+            rods={rods}
+          />
         </div>
       </section>
     </main>
