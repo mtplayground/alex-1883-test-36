@@ -1,7 +1,10 @@
 import { APP_CONFIG } from './config';
 import { Abacus } from './components/Abacus';
+import { useAbacusState } from './hooks/useAbacusState';
 
 function App() {
+  const { rods } = useAbacusState(APP_CONFIG.rodCount);
+
   return (
     <main
       className="flex min-h-screen items-center px-8 py-12"
@@ -9,7 +12,7 @@ function App() {
     >
       <section className="mx-auto w-full max-w-2xl">
         <p className="mb-3 text-sm font-bold tracking-wider text-orange-800 uppercase">
-          Issue #7
+          Issue #8
         </p>
         <h1
           id="app-title"
@@ -23,7 +26,7 @@ function App() {
           configured for {APP_CONFIG.rodCount} rods.
         </p>
         <div aria-label="Abacus frame preview" className="mt-8 max-w-full">
-          <Abacus rodCount={APP_CONFIG.rodCount} />
+          <Abacus rodCount={APP_CONFIG.rodCount} rods={rods} />
         </div>
       </section>
     </main>

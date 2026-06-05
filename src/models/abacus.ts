@@ -20,10 +20,24 @@ export type EarthBeadState = Readonly<{
 
 export type BeadState = HeavenBeadState | EarthBeadState;
 
+export type BeadId = Readonly<
+  | {
+      kind: 'heaven';
+      rodIndex: number;
+    }
+  | {
+      earthIndex: EarthBeadIndex;
+      kind: 'earth';
+      rodIndex: number;
+    }
+>;
+
 export type RodState = Readonly<{
   heaven: boolean;
   earth: EarthBeadStates;
 }>;
+
+export type AbacusState = readonly RodState[];
 
 export const EMPTY_EARTH_BEADS: EarthBeadStates = [false, false, false, false];
 
