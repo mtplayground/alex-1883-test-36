@@ -49,12 +49,12 @@ function App() {
 
   return (
     <main
-      className="flex min-h-screen items-center px-8 py-12"
+      className="flex min-h-screen items-center px-4 py-8 sm:px-8 sm:py-12"
       aria-labelledby="app-title"
     >
-      <section className="mx-auto w-full max-w-2xl">
+      <section className="mx-auto w-full max-w-6xl">
         <p className="mb-3 text-sm font-bold tracking-wider text-orange-800 uppercase">
-          Issue #11
+          Issue #12
         </p>
         <h1
           id="app-title"

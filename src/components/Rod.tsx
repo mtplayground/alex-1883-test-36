@@ -42,7 +42,7 @@ export function Rod({
     <section
       aria-label={`${rodLabel}, value ${getRodDigit(rod)}`}
       className={joinClasses(
-        'relative flex w-24 flex-col items-center py-3',
+        'relative flex w-[var(--rod-w)] flex-col items-center py-3',
         className,
       )}
       data-rod-value={getRodDigit(rod)}
@@ -51,7 +51,7 @@ export function Rod({
         aria-hidden="true"
         className="absolute top-3 bottom-3 left-1/2 w-1 -translate-x-1/2 rounded-full bg-stone-700/70"
       />
-      <div className="relative flex h-20 items-end justify-center">
+      <div className="relative flex h-[var(--heaven-h)] items-end justify-center">
         <Bead
           active={rod.heaven}
           ariaLabel={`${rodLabel} heaven bead`}
@@ -63,11 +63,11 @@ export function Rod({
       <div
         aria-hidden="true"
         className={joinClasses(
-          'relative my-3 h-3 w-24 rounded-full',
+          'relative my-3 h-[var(--bar-h)] w-[var(--rod-w)] rounded-full',
           showBar ? 'bg-stone-900 shadow-sm' : 'bg-transparent',
         )}
       />
-      <div className="relative flex flex-col gap-2">
+      <div className="relative flex flex-col gap-[clamp(0.375rem,1.25vw,0.5rem)]">
         {rod.earth.map((active, earthIndex) => {
           const earthBeadId: BeadId = {
             earthIndex: earthIndex as EarthBeadIndex,

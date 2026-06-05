@@ -36,16 +36,19 @@ export function Abacus({
   return (
     <section
       aria-label={`${frameRods.length} rod abacus`}
-      className={joinClasses('w-full overflow-x-auto', className)}
+      className={joinClasses(
+        'w-full overflow-x-auto overscroll-x-contain pb-2 [--bar-h:0.75rem] [--bar-top:calc(0.75rem+var(--heaven-h)+0.75rem)] [--bead-h:clamp(2.75rem,9vw,3rem)] [--bead-w:clamp(3.75rem,13vw,4rem)] [--heaven-h:clamp(4.75rem,17vw,5rem)] [--rod-w:clamp(5rem,17vw,6rem)]',
+        className,
+      )}
       onPointerCancel={onBeadInteractionEnd}
       onPointerLeave={onBeadInteractionEnd}
       onPointerUp={onBeadInteractionEnd}
     >
-      <div className="inline-block rounded-md border-8 border-amber-950 bg-amber-100 p-4 shadow-2xl shadow-orange-950/20">
-        <div className="relative isolate grid auto-cols-[6rem] grid-flow-col gap-2">
+      <div className="inline-block rounded-md border-[clamp(0.375rem,1.5vw,0.5rem)] border-amber-950 bg-amber-100 p-[clamp(0.5rem,2vw,1rem)] shadow-2xl shadow-orange-950/20">
+        <div className="relative isolate grid auto-cols-[var(--rod-w)] grid-flow-col gap-[clamp(0.25rem,1vw,0.5rem)]">
           <div
             aria-hidden="true"
-            className="absolute top-[6.5rem] right-0 left-0 z-20 h-3 rounded-full bg-stone-950 shadow-md"
+            className="absolute top-[var(--bar-top)] right-0 left-0 z-20 h-[var(--bar-h)] rounded-full bg-stone-950 shadow-md"
           />
           {frameRods.map((rod, rodIndex) => (
             <Rod
