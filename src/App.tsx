@@ -1,4 +1,5 @@
 import { APP_CONFIG } from './config';
+import { Bead } from './components/Bead';
 
 function App() {
   return (
@@ -21,6 +22,13 @@ function App() {
           model and components in the next issues. The default abacus is
           configured for {APP_CONFIG.rodCount} rods.
         </p>
+        <div
+          aria-label="Bead component preview"
+          className="mt-8 flex h-20 items-center gap-8"
+        >
+          <Bead active={false} ariaLabel="Inactive earth bead" kind="earth" />
+          <Bead active ariaLabel="Active earth bead" kind="earth" />
+        </div>
       </section>
     </main>
   );
