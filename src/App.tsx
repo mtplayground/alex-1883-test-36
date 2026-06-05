@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { APP_CONFIG } from './config';
 import { Abacus } from './components/Abacus';
+import { ResetButton } from './components/ResetButton';
 import { ValueDisplay } from './components/ValueDisplay';
 import { useAbacusState } from './hooks/useAbacusState';
 import { getBeadActive } from './lib/abacusState';
@@ -12,7 +13,7 @@ type DragIntent = Readonly<{
 }>;
 
 function App() {
-  const { rods, setBead } = useAbacusState(APP_CONFIG.rodCount);
+  const { reset, rods, setBead } = useAbacusState(APP_CONFIG.rodCount);
   const [dragIntent, setDragIntent] = useState<DragIntent | null>(null);
   const totalValue = useMemo(() => getTotalValue(rods), [rods]);
 
@@ -41,6 +42,11 @@ function App() {
     setDragIntent(null);
   }, []);
 
+  const handleReset = useCallback(() => {
+    reset();
+    setDragIntent(null);
+  }, [reset]);
+
   return (
     <main
       className="flex min-h-screen items-center px-8 py-12"
@@ -48,7 +54,7 @@ function App() {
     >
       <section className="mx-auto w-full max-w-2xl">
         <p className="mb-3 text-sm font-bold tracking-wider text-orange-800 uppercase">
-          Issue #10
+          Issue #11
         </p>
         <h1
           id="app-title"
@@ -65,7 +71,10 @@ function App() {
           aria-label="Abacus frame preview"
           className="mt-8 flex max-w-full flex-col gap-4"
         >
-          <ValueDisplay value={totalValue} />
+          <div className="flex flex-wrap items-end gap-3">
+            <ValueDisplay value={totalValue} />
+            <ResetButton disabled={totalValue === 0} onReset={handleReset} />
+          </div>
           <Abacus
             onBeadInteractionEnd={handleBeadInteractionEnd}
             onBeadPointerDown={handleBeadPointerDown}
