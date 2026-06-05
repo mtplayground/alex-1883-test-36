@@ -1,0 +1,53 @@
+# Architecture Plan
+
+## Scope
+
+Build a Vite + React single-page app for an interactive soroban-style abacus. The app will model each rod as one heaven bead worth 5 and four earth beads worth 1, render a configurable number of rods, support click/drag bead movement with snapping rules, display the live decimal value, and ship with unit, E2E, build, and deployment checks.
+
+## Module Structure
+
+- `src/main.tsx`: React entry point and global style import.
+- `src/App.tsx`: App shell that wires config, state, controls, abacus frame, and live value display.
+- `src/config.ts`: Tunable defaults read from Vite env, including rod count and any display limits.
+- `src/models/abacus.ts`: Shared types for `BeadKind`, `RodState`, `AbacusState`, bead indices, and pure value helpers.
+- `src/lib/value.ts`: Pure functions such as `getRodDigit(rod)`, `getTotalValue(rods)`, and initial state builders.
+- `src/lib/move.ts`: Pure snap/toggle rules that update one rod or bead without mutating state.
+- `src/components/Bead.tsx`: Single visual bead with active/inactive state, pointer handlers, accessible labels, and transition classes.
+- `src/components/Rod.tsx`: One column containing the heaven bead and four earth beads, positioned from `RodState`.
+- `src/components/Abacus.tsx`: Frame, rods, reckoning bar, and responsive layout container driven by configured rod count.
+- `src/components/ValueDisplay.tsx`: Derived decimal output.
+- `src/components/ResetButton.tsx`: Clears all rods to zero through app-level state.
+- `src/styles/index.css`: Tailwind layers plus app-specific CSS variables for frame sizing, bead dimensions, and responsive scaling.
+- `src/test/`: Unit tests for value and move logic.
+- `e2e/`: Browser tests for bead interaction, live value updates, reset behavior, and basic responsive rendering.
+
+## Shared Types
+
+- `RodState`: stores whether the heaven bead is active and how many earth beads are active, or equivalent normalized bead-position data.
+- `BeadId`: identifies a bead by rod index, bead kind, and earth bead index when applicable.
+- `AbacusState`: ordered array of `RodState`, with the rightmost rod representing ones and rods to the left representing higher powers of ten.
+- Value helpers remain framework-independent so they can be covered by unit tests before UI behavior is complete.
+
+## Dependencies Between Issues
+
+- Issue #1 creates the Vite React TypeScript base, scripts, and placeholder shell.
+- Issues #2 and #3 add styling/tooling and runtime config that later UI work depends on.
+- Issue #4 defines the core model and value helpers used by rods, state, display, and tests.
+- Issues #5, #6, and #7 build the visual component stack from bead to rod to full frame.
+- Issue #8 lifts bead positions into app state and introduces state handlers using the pure movement rules.
+- Issue #9 connects pointer interactions to state handlers and keeps click/touch behavior consistent.
+- Issues #10 and #11 consume state through derived value display and reset controls.
+- Issue #12 adjusts the layout and hit targets for viewport and touch usability after the full UI exists.
+- Issue #13 locks the model and value helpers with unit tests.
+- Issue #14 validates the complete browser workflow after interaction, display, and reset are available.
+- Issue #15 verifies production build output and documents development, build, preview, and static deployment steps.
+
+## Key Design Decisions
+
+- Use Vite + React + TypeScript for fast SPA development and strongly typed component/data contracts.
+- Keep abacus arithmetic and snapping rules as pure functions outside React components so they are deterministic, reusable, and easy to test.
+- Store rod state in a compact normalized form rather than DOM-derived positions; rendering derives positions from state.
+- Use Tailwind for layout and component styling, with CSS variables for bead/frame dimensions where responsive scaling is easier outside utility classes.
+- Prefer pointer events over separate mouse/touch handlers so click and drag behavior share one input path.
+- Use Vitest with React Testing Library for unit/component tests and Playwright for E2E coverage.
+- Treat the app as a static client-only deployment; production prep should verify `npm run build` and preview/static serving.
