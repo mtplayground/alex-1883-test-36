@@ -44,11 +44,11 @@ export function Abacus({
       onPointerLeave={onBeadInteractionEnd}
       onPointerUp={onBeadInteractionEnd}
     >
-      <div className="inline-block rounded-md border-[clamp(0.375rem,1.5vw,0.5rem)] border-amber-950 bg-amber-100 p-[clamp(0.5rem,2vw,1rem)] shadow-2xl shadow-orange-950/20">
+      <div className="inline-block rounded-md border-[clamp(0.375rem,1.5vw,0.5rem)] border-blue-950 bg-blue-100 p-[clamp(0.5rem,2vw,1rem)] shadow-2xl shadow-blue-950/20">
         <div className="relative isolate grid auto-cols-[var(--rod-w)] grid-flow-col gap-[clamp(0.25rem,1vw,0.5rem)]">
           <div
             aria-hidden="true"
-            className="absolute top-[var(--bar-top)] right-0 left-0 z-20 h-[var(--bar-h)] rounded-full bg-stone-950 shadow-md"
+            className="absolute top-[var(--bar-top)] right-0 left-0 z-20 h-[var(--bar-h)] rounded-full bg-blue-950 shadow-md"
           />
           {frameRods.map((rod, rodIndex) => (
             <Rod
