@@ -15,6 +15,8 @@ decimal value, and provides a clear control to reset the abacus to zero.
 - Snap behavior that keeps earth beads grouped toward or away from the
   reckoning bar.
 - Responsive abacus frame that scales for desktop and small touch screens.
+- Sky-blue visual theme using `sky-400` active beads with matching sky-toned
+  frame, borders, focus rings, and shadows.
 - Live formatted value display and disabled/enabled clear button state.
 - Static production build suitable for root, subdirectory, or bare directory
   hosting.
