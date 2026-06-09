@@ -2,52 +2,42 @@
 
 ## Scope
 
-Build a Vite + React single-page app for an interactive soroban-style abacus. The app will model each rod as one heaven bead worth 5 and four earth beads worth 1, render a configurable number of rods, support click/drag bead movement with snapping rules, display the live decimal value, and ship with unit, E2E, build, and deployment checks.
+Implement Issue #31: re-shade the existing abacus from generic Tailwind blue
+classes to sky-blue tones centered on `sky-400`, while preserving current
+layout, pointer interactions, accessibility labels, and contrast.
 
 ## Module Structure
 
-- `src/main.tsx`: React entry point and global style import.
-- `src/App.tsx`: App shell that wires config, state, controls, abacus frame, and live value display.
-- `src/config.ts`: Tunable defaults read from Vite env, including rod count and any display limits.
-- `src/models/abacus.ts`: Shared types for `BeadKind`, `RodState`, `AbacusState`, bead indices, and pure value helpers.
-- `src/lib/value.ts`: Pure functions such as `getRodDigit(rod)`, `getTotalValue(rods)`, and initial state builders.
-- `src/lib/move.ts`: Pure snap/toggle rules that update one rod or bead without mutating state.
-- `src/components/Bead.tsx`: Single visual bead with active/inactive state, pointer handlers, accessible labels, and transition classes.
-- `src/components/Rod.tsx`: One column containing the heaven bead and four earth beads, positioned from `RodState`.
-- `src/components/Abacus.tsx`: Frame, rods, reckoning bar, and responsive layout container driven by configured rod count.
-- `src/components/ValueDisplay.tsx`: Derived decimal output.
-- `src/components/ResetButton.tsx`: Clears all rods to zero through app-level state.
-- `src/styles/index.css`: Tailwind layers plus app-specific CSS variables for frame sizing, bead dimensions, and responsive scaling.
-- `src/test/`: Unit tests for value and move logic.
-- `e2e/`: Browser tests for bead interaction, live value updates, reset behavior, and basic responsive rendering.
+- `src/components/Abacus.tsx`: owns the abacus frame, frame border/background,
+  reckoning bar, and frame shadow classes. This is where the frame and bar
+  palette should move from `blue-*` to matching `sky-*` classes.
+- `src/components/Bead.tsx`: owns bead active/inactive surface classes,
+  bead border, focus ring, and shadow color values. This is where bead surfaces
+  should use `sky-400` as the primary active tone with darker sky shades for
+  inactive beads, border, focus, and inset/drop shadow colors.
+- `src/components/Rod.tsx`: no planned changes unless rod-level color classes
+  are discovered during implementation.
+- `src/styles.css`: no planned changes; Tailwind utility classes are already
+  colocated with the relevant components.
 
 ## Shared Types
 
-- `RodState`: stores whether the heaven bead is active and how many earth beads are active, or equivalent normalized bead-position data.
-- `BeadId`: identifies a bead by rod index, bead kind, and earth bead index when applicable.
-- `AbacusState`: ordered array of `RodState`, with the rightmost rod representing ones and rods to the left representing higher powers of ten.
-- Value helpers remain framework-independent so they can be covered by unit tests before UI behavior is complete.
+No shared type changes are needed. Existing `BeadId`, `BeadKind`, `RodState`,
+and abacus state/value helpers remain unchanged because this issue is purely
+visual.
 
 ## Dependencies Between Issues
 
-- Issue #1 creates the Vite React TypeScript base, scripts, and placeholder shell.
-- Issues #2 and #3 add styling/tooling and runtime config that later UI work depends on.
-- Issue #4 defines the core model and value helpers used by rods, state, display, and tests.
-- Issues #5, #6, and #7 build the visual component stack from bead to rod to full frame.
-- Issue #8 lifts bead positions into app state and introduces state handlers using the pure movement rules.
-- Issue #9 connects pointer interactions to state handlers and keeps click/touch behavior consistent.
-- Issues #10 and #11 consume state through derived value display and reset controls.
-- Issue #12 adjusts the layout and hit targets for viewport and touch usability after the full UI exists.
-- Issue #13 locks the model and value helpers with unit tests.
-- Issue #14 validates the complete browser workflow after interaction, display, and reset are available.
-- Issue #15 verifies production build output and documents development, build, preview, and static deployment steps.
+Issue #31 has no dependencies. The current component hierarchy already exists,
+and the requested change is scoped to presentational Tailwind classes.
 
 ## Key Design Decisions
 
-- Use Vite + React + TypeScript for fast SPA development and strongly typed component/data contracts.
-- Keep abacus arithmetic and snapping rules as pure functions outside React components so they are deterministic, reusable, and easy to test.
-- Store rod state in a compact normalized form rather than DOM-derived positions; rendering derives positions from state.
-- Use Tailwind for layout and component styling, with CSS variables for bead/frame dimensions where responsive scaling is easier outside utility classes.
-- Prefer pointer events over separate mouse/touch handlers so click and drag behavior share one input path.
-- Use Vitest with React Testing Library for unit/component tests and Playwright for E2E coverage.
-- Treat the app as a static client-only deployment; production prep should verify `npm run build` and preview/static serving.
+- Keep color changes localized to existing class strings instead of introducing
+  a new theme layer, because this is a narrow one-palette adjustment.
+- Use `sky-400` for the active bead surface as requested, with nearby sky shades
+  such as `sky-100`, `sky-800`, and `sky-950` for frame, inactive beads,
+  borders, bar, focus ring, and shadows.
+- Preserve all sizing, spacing, transitions, pointer event handlers, and ARIA
+  behavior.
+- Validate with lint/build or available project checks after implementation.
